@@ -22,7 +22,7 @@ To run this project locally using Docker, follow these steps:
 3. Build the Docker image:
 
     ```bash
-    docker-compose build . -t accounts:latest
+    docker build . -t accounts:latest
     ```
 
 4. Start the Docker container:
