@@ -28,7 +28,7 @@ To run this project locally using Docker, follow these steps:
 4. Start the Docker container:
 
     ```bash
-    docker-compose up
+    docker-compose up -d
     ```
 
 5. Create a superuser:
