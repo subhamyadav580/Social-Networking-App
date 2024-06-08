@@ -210,7 +210,7 @@ Authorization: Token your_token
 
 ### User Search
 
-**Endpoint**: `/search/?search=test&page=1` (GET)
+**Endpoint**: `/search/?search=tes&page=2` (GET)
 
 **Request Header**:
 ```
@@ -219,13 +219,18 @@ Authorization: Token your_token
 
 **Response**:
 ```json
-[
-    {
-        "id": 2,
-        "email": "test@gmail.com",
-        "full_name": "test acc",
-        "is_staff": false,
-        "is_admin": false
-    }
-]
+{
+    "count": 11,
+    "next": null,
+    "previous": "http://127.0.0.1:8000/search/?search=tes",
+    "results": [
+        {
+            "id": 12,
+            "email": "test@gmail.com",
+            "full_name": "test acc",
+            "is_staff": false,
+            "is_admin": false
+        }
+    ]
+}
 ```
