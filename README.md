@@ -31,7 +31,14 @@ To run this project locally using Docker, follow these steps:
     docker-compose up -d
     ```
 
-5. Create a superuser:
+
+5. To view container logs:
+
+    ```bash
+    docker-compose logs
+    ```
+
+6. Create a superuser:
 
     ```bash
     docker-compose exec web python manage.py createsuperuser
