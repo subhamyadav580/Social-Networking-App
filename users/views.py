@@ -24,8 +24,12 @@ class RegisterAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        user_data = UserSerializer(user, context=self.get_serializer_context()).data
+        user_data['user_id'] = user_data['id']
+        del user_data['id']
         return Response({
-            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "message": "User successfully created",
+            "user": user_data,
             "token": Token.objects.get(user=user).key
         })
 
@@ -38,8 +42,12 @@ class LoginAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
+        user_data = UserSerializer(user, context=self.get_serializer_context()).data
+        user_data['user_id'] = user_data['id']
+        del user_data['id']
         return Response({
-            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "message": "Logged in successfully",
+            "user": user_data,
             "token": Token.objects.get(user=user).key
         })
 
@@ -52,9 +60,13 @@ class FriendList(APIView):
         friend_ids = set(sent_requests).union(set(received_requests))
         friends = User.objects.filter(id__in=friend_ids)
         serializer = UserSerializer(friends, many=True)
-        if len(serializer.data) > 0:
-            return Response(serializer.data)
-        return Response({"message": "no friends"})
+        all_data = serializer.data
+        if len(all_data) > 0:
+            for item in all_data:
+                item['user_id'] = item['id']
+                del item['id']
+            return Response({"friends_list": all_data})
+        return Response({"message": "no friends", "friends_list": all_data})
         
 
 class SendFriendRequest(APIView):
@@ -101,10 +113,14 @@ class PendingFriendRequests(APIView):
     def get(self, request):
         requests = FriendRequest.objects.filter(to_user=request.user, is_accepted=False)
         serializer = FriendRequestSerializer(requests, many=True)
-        if serializer.data:
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        all_requests = serializer.data
+        if len(all_requests) > 0:
+            for item in all_requests:
+                item['request_id'] = item['id']
+                del item['id']
+            return Response({"pending_requests": all_requests}, status=status.HTTP_200_OK)
         else:
-            return Response({"message": "No pending requests"}, status=status.HTTP_200_OK)
+            return Response({"message": "No pending requests", "pending_requests": all_requests}, status=status.HTTP_200_OK)
 
 # Reject Friend Request
 class RejectFriendRequest(APIView):

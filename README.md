@@ -48,24 +48,25 @@ To run this project locally using Docker, follow these steps:
 **Request Body**:
 ```json
 {
-    "email": "test@user.com",
-    "full_name": "test user",
-    "password": "test@12345",
-    "password2": "test@12345"
+  "email": "test@gmail.com",
+  "full_name": "test acc",
+  "password": "password",
+  "password2": "password"
 }
 ```
 
 **Response**:
 ```json
 {
+    "message": "User successfully created",
     "user": {
-        "id": 1,
-        "email": "test@user.com",
-        "full_name": "test user",
+        "email": "test@gmail.com",
+        "full_name": "test acc",
         "is_staff": false,
-        "is_admin": false
+        "is_admin": false,
+        "user_id": 12
     },
-    "token": "your_token"
+    "token": "5f8a921b0310e83bc630e5d62d2b0ba8edf78d7e"
 }
 
 ```
@@ -77,8 +78,8 @@ To run this project locally using Docker, follow these steps:
 **Request Body**:
 ```json
 {
-    "email": "test@user.com",
-    "password": "test@12345"
+  "email": "test@gmail.com",
+  "password": "password"
 }
 
 ```
@@ -86,14 +87,15 @@ To run this project locally using Docker, follow these steps:
 **Response**:
 ```json
 {
+    "message": "Logged in successfully",
     "user": {
-        "id": 1,
-        "email": "test@user.com",
-        "full_name": "test user",
+        "email": "test@gmail.com",
+        "full_name": "test acc",
         "is_staff": false,
-        "is_admin": false
+        "is_admin": false,
+        "user_id": 12
     },
-    "token": "your_token"
+    "token": "5f8a921b0310e83bc630e5d62d2b0ba8edf78d7e"
 }
 ```
 
@@ -115,6 +117,35 @@ Authorization: Token your_token
 }
 
 ```
+
+
+### Pending Friend Requests
+
+
+**Endpoint**: `/friend-request/pending/` (GET)
+
+**Request Header**:
+```
+Authorization: Token your_token
+```
+
+**Response**:
+```json
+{
+    "pending_requests": [
+        {
+            "from_user": "test@gmail.com",
+            "to_user": "admin@gmail.com",
+            "is_accepted": false,
+            "created_at": "2024-06-08T10:14:15.077341Z",
+            "request_id": 10
+        }
+    ]
+}
+
+```
+
+
 ### Accept Friend Request
 
 **Endpoint**: `/friend-request/accept/<request_id>/` (POST)
@@ -146,30 +177,6 @@ Authorization: Token your_token
 }
 ```
 
-### Pending Friend Requests
-
-
-**Endpoint**: `/friend-request/pending/` (GET)
-
-**Request Header**:
-```
-Authorization: Token your_token
-```
-
-**Response**:
-```json
-[
-    {
-        "id": 1,
-        "from_user": "sender@example.com",
-        "to_user": "receiver@example.com",
-        "is_accepted": false,
-        "created_at": "2024-06-08T12:00:00Z"
-    }
-]
-
-```
-
 ### Friend List
 
 **Endpoint**: `/friend-list` (GET)
@@ -184,14 +191,14 @@ Authorization: Token your_token
 [
     {
         "id": 2,
-        "email": "friend1@example.com",
+        "email": "friend1@gmail.com",
         "full_name": "Friend One",
         "is_staff": false,
         "is_admin": false
     },
     {
         "id": 3,
-        "email": "friend2@example.com",
+        "email": "friend2@gmail.com",
         "full_name": "Friend Two",
         "is_staff": false,
         "is_admin": false
@@ -203,7 +210,7 @@ Authorization: Token your_token
 
 ### User Search
 
-**Endpoint**: `/search/?search=<keyword>&page=1` (GET)
+**Endpoint**: `/search/?search=test&page=1` (GET)
 
 **Request Header**:
 ```
@@ -215,8 +222,8 @@ Authorization: Token your_token
 [
     {
         "id": 2,
-        "email": "user@example.com",
-        "full_name": "John Doe",
+        "email": "test@gmail.com",
+        "full_name": "test acc",
         "is_staff": false,
         "is_admin": false
     }
